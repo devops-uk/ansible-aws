@@ -1,0 +1,19 @@
+- name: Install HTTPD
+  hosts: web
+  become: yes
+  gather_facts: no
+
+  tasks:
+    - yum:
+        name: httpd
+        state: present
+
+    - copy:
+        content: "<h1>HTTPD deployed using Ansible-playbook</h1>"
+        dest: /var/www/html/index.html
+
+    - service:
+        name: httpd
+        state: started
+        enabled: yes
+

@@ -1,0 +1,33 @@
+- name: Create EC2 Instance
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Create Security Group
+      amazon.aws.ec2_security_group:
+        name: "{{ security_group }}"
+        description: Allow SSH and Web
+        region: "{{ region }}"
+        rules:
+          - proto: tcp
+            ports: [22, 80, 8080]
+            cidr_ip: 0.0.0.0/0
+
+    - name: Launch EC2
+      amazon.aws.ec2_instance:
+        name: "{{ tag_name }}"
+        instance_type: "{{ instance_type }}"
+        image_id: "{{ ami_id }}"
+        key_name: "{{ key_name }}"
+        region: "{{ region }}"
+        security_group: "{{ security_group }}"
+        wait: yes
+      register: ec2
+
+    - name: Show EC2 IP
+      debug:
+        msg: "Public IP: {{ ec2.instances[0].public_ip_address }}"
+
