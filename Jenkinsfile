@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/<yourusername>/ansible-aws.git'
+                git branch: 'main', url: 'https://github.com/devops-uk/ansible-aws.git'
             }
         }
 
