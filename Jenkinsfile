@@ -12,19 +12,23 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/devops-uk/ansible-aws.git'
             }
         }
-
-        stage('Provision EC2') {
-            steps {
-                sh "ansible-playbook ${ANSIBLE_DIR}/ec2-create.yml -i localhost"
-            }
-        }
-
-        stage('Deploy HTTPD') {
-            steps {
-                sh "ansible-playbook -i ${INVENTORY} ${ANSIBLE_DIR}/deploy-httpd.yml"
-            }
+    stage('Provision EC2') {
+    steps {
+        dir('ansible-aws') {
+            sh "ansible-playbook ec2-create.yml -i localhost"
         }
     }
+}
+
+stage('Deploy HTTPD') {
+    steps {
+        dir('ansible-aws') {
+            sh "ansible-playbook -i aws_ec2.yml deploy-httpd.yml"
+        }
+    }
+}
+
+
 
     post {
         success {
