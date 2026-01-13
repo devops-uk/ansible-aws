@@ -17,4 +17,3 @@
         security_group: "{{ security_group }}"
         tags:
           Role: "{{ tag_name }}"
-
