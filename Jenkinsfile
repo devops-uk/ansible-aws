@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        AWS_ACCESS_KEY_ID = credentials('aws-access-key')
+        AWS_ACCESS_KEY_ID     = credentials('aws-access-key')
         AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')
-        AWS_DEFAULT_REGION = 'us-east-1'
+        AWS_DEFAULT_REGION    = 'us-east-1'
     }
 
     stages {
@@ -16,13 +16,13 @@ pipeline {
 
         stage('Provision EC2') {
             steps {
-                sh "ansible-playbook ec2-create.yml -i localhost"
+                sh 'ansible-playbook ec2-create.yml -i localhost'
             }
         }
 
         stage('Deploy HTTPD') {
             steps {
-                sh "ansible-playbook -i aws_ec2.yml deploy-httpd.yml"
+                sh 'ansible-playbook -i aws_ec2.yml deploy-httpd.yml'
             }
         }
     }
