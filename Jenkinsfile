@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         ANSIBLE_DIR = 'ansible-aws'
-        INVENTORY = "${ANSIBLE_DIR}/inventory.ini"
+        INVENTORY = "${ANSIBLE_DIR}/aws_ec2.yml"
     }
 
     stages {
@@ -13,12 +13,14 @@ pipeline {
             }
         }
 
-        stage('Run Ansible HTTPD Playbook') {
+        stage('Provision EC2') {
             steps {
-                // Ensure Ansible is installed on Jenkins node
-                sh 'ansible --version'
+                sh "ansible-playbook ${ANSIBLE_DIR}/ec2-create.yml -i localhost"
+            }
+        }
 
-                // Run playbook
+        stage('Deploy HTTPD') {
+            steps {
                 sh "ansible-playbook -i ${INVENTORY} ${ANSIBLE_DIR}/deploy-httpd.yml"
             }
         }
@@ -26,10 +28,11 @@ pipeline {
 
     post {
         success {
-            echo 'HTTPD deployment successful!'
+            echo 'HTTPD deployed dynamically via Jenkins!'
         }
         failure {
-            echo 'Deployment failed. Check console output.'
+            echo 'Deployment failed. Check logs.'
         }
     }
 }
+
