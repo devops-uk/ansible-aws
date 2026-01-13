@@ -1,12 +1,7 @@
 - name: Deploy HTTPD
-<<<<<<< HEAD
-  hosts: tag_Role_web
-  become: yes
-=======
   hosts: tag_web_server
   become: yes
 
->>>>>>> 339985c (httpd tag)
   tasks:
     - name: Install Apache
       apt:
@@ -24,8 +19,4 @@
         name: apache2
         state: started
         enabled: yes
-<<<<<<< HEAD
-
-=======
->>>>>>> 339985c (httpd tag)
 
